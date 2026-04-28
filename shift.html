@@ -33,10 +33,10 @@
       Group:
       <select id="group">
         <optgroup label="6 Platoons">
-          <option value="A">Platoon A</option>
+          <option value="A" selected>Platoon A</option>
           <option value="B">Platoon B</option>
           <option value="C">Platoon C</option>
-          <option value="D" selected>Platoon D</option>
+          <option value="D">Platoon D</option>
           <option value="E">Platoon E</option>
           <option value="F">Platoon F</option>
         </optgroup>
@@ -62,7 +62,8 @@
   <div id="calendar"></div>
 
   <div class="note">
-    Fixed year range: <code>2026-01-01 → 2026-12-31</code>
+    <strong>Shift times:</strong> Days: <code>06:45–17:30</code> / Early Afternoons: <code>11:00–21:45</code> / Late Afternoons: <code>16:45–03:30</code> / Nights: <code>20:45–07:30</code>
+    <br/><br/>Fixed year range: <code>2026-01-01 → 2026-12-31</code>
     <br/>• 14-day pattern: <code>2W 2O 3W 2O 2W 3O</code> (7 work + 7 off)
     <br/>• Platoons rotate blocks every 14 days: <code>Day → Night → Afternoon</code> (repeat)
     <br/>• Fixed shifts keep the same turn forever (but still follow the same 14-day work/off pattern).
@@ -248,6 +249,18 @@
       return lines.join("\r\n");
     }
 
+    function getInitialCalendarDate() {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+
+      // If we are in 2026, open on the current month.
+      // Otherwise, open on January 2026 because this calendar is fixed to 2026.
+      if (currentYear === 2026) {
+        return iso(today);
+      }
+      return YEAR_FROM;
+    }
+
     // -------------------------
     // Calendar UI (MONTH ONLY)
     // -------------------------
@@ -266,7 +279,7 @@
             center: "title",
             right: "" // remove week toggle
           },
-          initialDate: YEAR_FROM,
+          initialDate: getInitialCalendarDate(),
           events
         });
         calendar.render();
@@ -290,4 +303,3 @@
   </script>
 </body>
 </html>
-
